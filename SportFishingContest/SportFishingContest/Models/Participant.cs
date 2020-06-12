@@ -12,8 +12,5 @@ namespace SportFishingContest.Models
         public string Name { get; set; }
         public Contest Contest { get; set; }
         public Guid ContestId { get; set; }
-        public List<Contest> Contests { get; set; }
-        public List<Fish> Fishes { get; set; }
-
     }
 }
