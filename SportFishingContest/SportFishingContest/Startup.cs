@@ -12,6 +12,8 @@ using SportFishingContest.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using SportFishingContest.Interfaces;
+using SportFishingContest.Repositories;
 
 namespace SportFishingContest
 {
@@ -34,6 +36,8 @@ namespace SportFishingContest
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddControllersWithViews();
             services.AddRazorPages();
+
+            services.AddScoped<IContestRepository, ContestRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

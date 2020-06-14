@@ -1,0 +1,33 @@
+﻿@model ContestViewModel
+@{
+    ViewData["Title"] = "Skapa tävling";
+}
+
+<h2>Logga fångst</h2>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="CreateContest">
+            <div class="form-group" id="create-div">
+                <label asp-for="Date"></label>
+                <input type="date" class="form-control" asp-for="Date" />
+                <span asp-validation-for="Date"></span>
+            </div>
+
+            <div class="form-group" id="create-div-notes">
+                @Html.LabelFor(n => n.ContestName)
+                @Html.TextBoxFor(n => n.ContestName, new { @class = "form-control" })
+                @Html.ValidationMessageFor(w => w.ContestName)
+            </div>
+
+            <div>
+                <input class="btn btn-success" type="submit" value="Spara" />
+                <a class="btn btn-dark" style="padding-left:1rem;" asp-action="Index">Hem</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
