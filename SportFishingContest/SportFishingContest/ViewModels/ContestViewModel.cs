@@ -10,6 +10,7 @@ namespace SportFishingContest.ViewModels
     public class ContestViewModel
     {
         public Guid Id { get; set; }
+        public Contest Contest { get; set; }
 
         public Participant Participant { get; set; } 
         public Fish Fish { get; set; }
@@ -24,6 +25,7 @@ namespace SportFishingContest.ViewModels
         [Display(Name = "Namn på tävling")]
         public string ContestName { get; set; }
 
+        public List<Contest> Contests { get; set; }
         public List<Participant> Participants { get; set; }
         public List<Fish> Fishes { get; set; }
     }

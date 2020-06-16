@@ -1,4 +1,5 @@
-﻿@{
+﻿@model ContestViewModel
+@{
     ViewData["Title"] = "Home Page";
 }
 
@@ -7,3 +8,23 @@
     <p>Här kan du se ditt och andras resultat i dom tävlingar som pågår just nu.</a>.</p>
     <p>Du kan även anmäla dig till tävlingar som du är intresserad av att vara med i.</a>.</p>
 </div>
+
+
+@foreach (var contest in Model.Contests)
+{
+    <section class="panel panel-default" id="_summaryId">
+        <h3 class="panel-heading" , id="new"> @contest.Name</h3>
+        <div class="panel-body">
+            Tävlingsår: @contest.Date.Year
+        </div>
+        <div hidden="">
+            @contest.Id
+        </div>
+        <div class="panel-footer">
+
+                <a class="btn btn-info" asp-action="Contest" asp-route-id="@contest.Id">Gå till tävling</a>
+
+        </div>
+    </section>
+
+}

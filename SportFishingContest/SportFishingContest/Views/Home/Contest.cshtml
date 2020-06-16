@@ -1,0 +1,54 @@
+﻿@model ContestViewModel
+@{
+    ViewData["Title"] = "Tävling";
+    //Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+    <div class="container" id="index-view">
+       
+            <div id="welcome-text">
+                <h2>Välkommen till @Model.ContestName @Model.Date.Year</h2>
+            </div>
+            <hr />
+
+            <div id="p-introtext">
+                <p> Här kan du se hur du och dina vänner ligger till i tävlingen</p>
+                <p>
+                    Är du inte med? Ta kontakt med Admin för tävlingen
+                </p>
+            </div>
+            <hr />
+            <div>
+                <a class="btn btn-info" asp-action="Contest" asp-route-id="id">Lägg till deltagare</a>
+            </div>
+            <hr />
+
+            <section class="panel panel-default">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Namn</th>
+                            <th>Gädda 1</th>
+                            <th>Gädda 2</th>
+                            <th>Gädda 3</th>
+                            <th>Gädda 4</th>
+                            <th>Gädda 5</th>
+                            <th>Gädda 6</th>
+                            <th>Gädda 7</th>
+                            <th>Gädda 8</th>
+                            <th>Gädda 9</th>
+                            <th>Gädda 10</th>
+                            <th>Totalt CM</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                       <tr>
+                           <th>Joppe</th>
+                       </tr>
+                    </tbody>
+                </table>
+            </section>
+
+      
+    </div>

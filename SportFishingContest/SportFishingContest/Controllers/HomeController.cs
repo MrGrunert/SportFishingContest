@@ -23,7 +23,9 @@ namespace SportFishingContest.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            var model = new ContestViewModel();
+            model.Contests = _contestRepository.GetAllContests().OrderByDescending(d => d.Date).ToList();
+            return View(model);
         }
 
         [HttpGet]
@@ -31,7 +33,7 @@ namespace SportFishingContest.Controllers
         public IActionResult CreateContest()
         {
             var viewModel = new ContestViewModel();
-            
+
 
             return View(viewModel);
         }
@@ -39,6 +41,41 @@ namespace SportFishingContest.Controllers
         [HttpPost]
         //[ValidateAntiForgeryToken]
         public IActionResult CreateContest(ContestViewModel model)
+        {
+
+            if (ModelState.IsValid)
+            {
+                var newContest = new Contest();
+                newContest.Date = model.Date;
+                newContest.Name = model.ContestName;
+                newContest = _contestRepository.Add(newContest);
+                _contestRepository.Commit();
+
+                return RedirectToAction("Index", "Home", new { id = newContest.Id });  //Redirect till tävlingen
+            }
+
+            return View(model);
+        }
+
+        [HttpGet]
+        //[ValidateAntiForgeryToken]
+        public IActionResult Contest(Guid id)
+        {
+            var theContest = _contestRepository.GetContestById(id);
+            var viewModel = new ContestViewModel
+            {
+                Id = theContest.Id,
+                ContestName = theContest.Name,
+                Date = theContest.Date
+            };
+
+
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        //[ValidateAntiForgeryToken]
+        public IActionResult Contest(ContestViewModel model)
         {
 
             if (ModelState.IsValid)
