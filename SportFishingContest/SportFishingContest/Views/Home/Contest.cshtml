@@ -48,14 +48,18 @@
             <tbody>
                 @foreach (var user in Model.Participants.OrderBy(x => x.Name))
                 {
-
+                    //collection.Skip(Math.Max(0, collection.Count() - N));
                     <tr>
                         <th>
-                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addFish">
-                                @user.Name
-                            </button>
+                            <a data-toggle="modal" data-id="@user.Id" title="Lägg till fisk" class="open-GetUserId btn btn-primary" href="#AddFish">@user.Name</a>
                         </th>
-                        <td>testerrrr</td>
+                        @foreach (var item in Model.Fishes.Where(x => x.ParticipantId == user.Id).OrderBy(l => l.Length).Skip(Math.Max(0, Model.Fishes.Where(x => x.ParticipantId == user.Id).Count() - 10)))
+                        {
+                            <td>@item.Length</td>
+                        }
+                    </tr>
+                    <tr>        
+                        <td>Total: @Model.Fishes.Where(x => x.ParticipantId == user.Id).OrderBy(l => l.Length).Skip(Math.Max(0, Model.Fishes.Where(x => x.ParticipantId == user.Id).Count() - 10)).Sum(x => x.Length)CM </td >
                     </tr>
                 }
             </tbody>
@@ -104,10 +108,8 @@
     </div>
 </div>
 
-
-
 <!-- The Modal Fishes-->
-<div class="modal" id="addFish">
+<div class="modal" id="AddFish">
     <div class="modal-dialog">
         <div class="modal-content">
 
@@ -120,13 +122,18 @@
             <!-- Modal body -->
             <div class="modal-body">
                 <form asp-action="AddFish">
+                    <div class="form-group" id="add-div-id" hidden="">
+                        @Html.TextBoxFor(i => Model.Id, new { @class = "form-control" })
+                    </div>
                     <div class="form-group" id="add-div-name">
                         @Html.LabelFor(f => f.Fish.Length)
                         @Html.TextBoxFor(f => f.Fish.Length, new { @class = "form-control" })
-                        
+
                     </div>
-                    <div class="form-group" id="add-div-id">
-                        @Html.TextBoxFor(i => i.Fish.ParticipantId, new { @class = "form-control" })
+                    <div class="form-group" id="add-div-id" hidden="">
+                        <label asp-for="ParticipantId"></label>
+                        <input type="text" class="form-control" asp-for="ParticipantId" id="userId" />
+                        <span asp-validation-for="ParticipantId"></span>
                     </div>
 
                     <div>
@@ -146,3 +153,13 @@
     </div>
 </div>
 
+
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script type="text/javascript">
+    jQuery(document).on("click", ".open-GetUserId", function () {
+        var myUserId = jQuery(this).data('id');
+        jQuery(".modal #userId").val(myUserId);
+    });
+</script>

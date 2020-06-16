@@ -67,12 +67,14 @@ namespace SportFishingContest.Controllers
         {
             var theContest = _contestRepository.GetContestById(id);
             var participants = GetParticipantsByContestId(id);
+            var fishes = _fishRepository.GetAllFishes();
             var viewModel = new ContestViewModel
             {
                 Id = theContest.Id,
                 ContestName = theContest.Name,
                 Date = theContest.Date,
-                Participants = participants
+                Participants = participants,
+                Fishes = fishes.ToList()
             };
 
 
@@ -110,10 +112,10 @@ namespace SportFishingContest.Controllers
             return RedirectToAction("Contest", "Home", new { id = model.Id });
         }
 
-        public IActionResult addFish(ContestViewModel model)
+        public IActionResult AddFish(ContestViewModel model)
         {
             var fish = new Fish();
-            fish.ParticipantId = model.Fish.ParticipantId;
+            fish.ParticipantId = model.ParticipantId;
             fish.Length = model.Fish.Length;
             _fishRepository.Add(fish);
             _fishRepository.Commit();
@@ -135,6 +137,12 @@ namespace SportFishingContest.Controllers
         {
             var participants = _participantRepository.GetParticipantsByContestId(contestId);
             return participants.ToList();
+        }
+
+        private List<Fish> GetFishesByParticipantId(Guid participantId)
+        {
+            var fishes = _fishRepository.GetFishByParticipantId(participantId);
+            return fishes.ToList();
         }
     }
 }

@@ -11,7 +11,8 @@ namespace SportFishingContest.ViewModels
     {
         public Guid Id { get; set; }
         public Contest Contest { get; set; }
-        public Participant Participant { get; set; } 
+        public Participant Participant { get; set; }
+        public Guid ParticipantId { get; set; }
         public Fish Fish { get; set; }
 
         [Required]
