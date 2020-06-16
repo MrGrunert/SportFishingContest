@@ -15,10 +15,14 @@ namespace SportFishingContest.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private IContestRepository _contestRepository;
-        public HomeController(ILogger<HomeController> logger, IContestRepository contestRepository)
+        private IParticipantRepository _participantRepository;
+        private IFishRepository _fishRepository;
+        public HomeController(ILogger<HomeController> logger, IContestRepository contestRepository, IParticipantRepository participantRepository, IFishRepository fishRepository)
         {
             _logger = logger;
             _contestRepository = contestRepository;
+            _participantRepository = participantRepository;
+            _fishRepository = fishRepository;
         }
 
         public IActionResult Index()
@@ -62,34 +66,58 @@ namespace SportFishingContest.Controllers
         public IActionResult Contest(Guid id)
         {
             var theContest = _contestRepository.GetContestById(id);
+            var participants = GetParticipantsByContestId(id);
             var viewModel = new ContestViewModel
             {
                 Id = theContest.Id,
                 ContestName = theContest.Name,
-                Date = theContest.Date
+                Date = theContest.Date,
+                Participants = participants
             };
 
 
             return View(viewModel);
         }
 
+        //[HttpPost]
+        ////[ValidateAntiForgeryToken]
+        //public IActionResult Contest(ContestViewModel model)
+        //{
+
+        //    if (ModelState.IsValid)
+        //    {
+        //        var newContest = new Contest();
+        //        newContest.Date = model.Date;
+        //        newContest.Name = model.ContestName;
+        //        newContest = _contestRepository.Add(newContest);
+        //        _contestRepository.Commit();
+
+        //        return RedirectToAction("Index", "Home", new { id = newContest.Id });  //Redirect till tävlingen
+        //    }
+
+        //    return View(model);
+        //}
         [HttpPost]
-        //[ValidateAntiForgeryToken]
-        public IActionResult Contest(ContestViewModel model)
+        public IActionResult AddParticipant(ContestViewModel model)
         {
 
-            if (ModelState.IsValid)
-            {
-                var newContest = new Contest();
-                newContest.Date = model.Date;
-                newContest.Name = model.ContestName;
-                newContest = _contestRepository.Add(newContest);
-                _contestRepository.Commit();
+            var participant = new Participant();
+            participant.ContestId = model.Id;
+            participant.Name = model.Participant.Name;
+            _participantRepository.Add(participant);
+            _participantRepository.Commit();
 
-                return RedirectToAction("Index", "Home", new { id = newContest.Id });  //Redirect till tävlingen
-            }
+            return RedirectToAction("Contest", "Home", new { id = model.Id });
+        }
 
-            return View(model);
+        public IActionResult addFish(ContestViewModel model)
+        {
+            var fish = new Fish();
+            fish.ParticipantId = model.Fish.ParticipantId;
+            fish.Length = model.Fish.Length;
+            _fishRepository.Add(fish);
+            _fishRepository.Commit();
+            return RedirectToAction("Contest", "Home", new { id = model.Id });
         }
 
         public IActionResult Privacy()
@@ -101,6 +129,12 @@ namespace SportFishingContest.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        private List<Participant> GetParticipantsByContestId(Guid contestId)
+        {
+            var participants = _participantRepository.GetParticipantsByContestId(contestId);
+            return participants.ToList();
         }
     }
 }

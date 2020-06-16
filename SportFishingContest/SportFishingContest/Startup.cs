@@ -38,6 +38,8 @@ namespace SportFishingContest
             services.AddRazorPages();
 
             services.AddScoped<IContestRepository, ContestRepository>();
+            services.AddScoped<IParticipantRepository, ParticipantRepository>();
+            services.AddScoped<IFishRepository, FishRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

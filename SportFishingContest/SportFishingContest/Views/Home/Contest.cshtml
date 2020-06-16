@@ -5,50 +5,144 @@
 }
 
 
-    <div class="container" id="index-view">
-       
-            <div id="welcome-text">
-                <h2>Välkommen till @Model.ContestName @Model.Date.Year</h2>
-            </div>
-            <hr />
+<div class="container" id="index-view">
 
-            <div id="p-introtext">
-                <p> Här kan du se hur du och dina vänner ligger till i tävlingen</p>
-                <p>
-                    Är du inte med? Ta kontakt med Admin för tävlingen
-                </p>
-            </div>
-            <hr />
-            <div>
-                <a class="btn btn-info" asp-action="Contest" asp-route-id="id">Lägg till deltagare</a>
-            </div>
-            <hr />
-
-            <section class="panel panel-default">
-                <table class="table table-bordered">
-                    <thead>
-                        <tr>
-                            <th>Namn</th>
-                            <th>Gädda 1</th>
-                            <th>Gädda 2</th>
-                            <th>Gädda 3</th>
-                            <th>Gädda 4</th>
-                            <th>Gädda 5</th>
-                            <th>Gädda 6</th>
-                            <th>Gädda 7</th>
-                            <th>Gädda 8</th>
-                            <th>Gädda 9</th>
-                            <th>Gädda 10</th>
-                            <th>Totalt CM</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                       <tr>
-                           <th>Joppe</th>
-                       </tr>
-                    </tbody>
-                </table>
-            </section>
-
-      
+    <div id="welcome-text">
+        <h2>Välkommen till @Model.ContestName @Model.Date.Year</h2>
     </div>
+    <hr />
+
+    <div id="p-introtext">
+        <p> Här kan du se hur du och dina vänner ligger till i tävlingen</p>
+        <p>
+            Är du inte med? Ta kontakt med Admin för tävlingen
+        </p>
+    </div>
+    <hr />
+    <div>
+        @*<a class="btn btn-info" asp-action="Contest" asp-route-id="id">Lägg till deltagare</a>*@
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addParticipant">
+            Lägg till tävlande
+        </button>
+    </div>
+    <hr />
+
+    <section class="panel panel-default">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Namn</th>
+                    <th>Gädda 1</th>
+                    <th>Gädda 2</th>
+                    <th>Gädda 3</th>
+                    <th>Gädda 4</th>
+                    <th>Gädda 5</th>
+                    <th>Gädda 6</th>
+                    <th>Gädda 7</th>
+                    <th>Gädda 8</th>
+                    <th>Gädda 9</th>
+                    <th>Gädda 10</th>
+                    <th>Totalt CM</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var user in Model.Participants.OrderBy(x => x.Name))
+                {
+
+                    <tr>
+                        <th>
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addFish">
+                                @user.Name
+                            </button>
+                        </th>
+                        <td>testerrrr</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </section>
+</div>
+
+
+<!-- The Modal Participants-->
+<div class="modal" id="addParticipant">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Lägg till tälande</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body">
+                <form asp-action="AddParticipant">
+                    <div class="form-group" id="add-div-name">
+                        @Html.LabelFor(n => n.Participant.Name)
+                        @Html.TextBoxFor(n => n.Participant.Name, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(w => w.ContestName)
+                    </div>
+                    <div class="form-group" id="add-div-id" hidden="">
+                        @Html.TextBoxFor(i => Model.Id, new { @class = "form-control" })
+                    </div>
+
+                    <div>
+                        <input class="btn btn-success" type="submit" asp-action="AddParticipant" value="Spara" />
+                        <a class="btn btn-dark" style="padding-left:1rem;" asp-action="Index">Hem</a>
+                    </div>
+                </form>
+
+            </div>
+
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+<!-- The Modal Fishes-->
+<div class="modal" id="addFish">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Lägg till fångst</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body">
+                <form asp-action="AddFish">
+                    <div class="form-group" id="add-div-name">
+                        @Html.LabelFor(f => f.Fish.Length)
+                        @Html.TextBoxFor(f => f.Fish.Length, new { @class = "form-control" })
+                        
+                    </div>
+                    <div class="form-group" id="add-div-id">
+                        @Html.TextBoxFor(i => i.Fish.ParticipantId, new { @class = "form-control" })
+                    </div>
+
+                    <div>
+                        <input class="btn btn-success" type="submit" asp-action="AddFish" value="Spara" />
+                        <a class="btn btn-dark" style="padding-left:1rem;" asp-action="Index">Hem</a>
+                    </div>
+                </form>
+
+            </div>
+
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
