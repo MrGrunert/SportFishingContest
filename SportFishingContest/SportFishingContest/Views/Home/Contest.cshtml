@@ -17,14 +17,19 @@
         <p>
             Är du inte med? Ta kontakt med Admin för tävlingen
         </p>
+       <a class="btn btn-primary" role='button' href='mailto:jimmy@grunert.nu?subject={0}'>Anmäl mig till tävlingen</a>
     </div>
-    <hr />
-    <div>
-        @*<a class="btn btn-info" asp-action="Contest" asp-route-id="id">Lägg till deltagare</a>*@
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addParticipant">
-            Lägg till tävlande
-        </button>
-    </div>
+    @if (User.Identity.IsAuthenticated)
+    {
+        <hr />
+        <div>
+
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addParticipant">
+                Lägg till tävlande
+            </button>
+
+        </div>
+    }
     <hr />
 
     <section class="panel panel-default">
@@ -32,17 +37,16 @@
             <thead>
                 <tr>
                     <th>Namn</th>
-                    <th>Gädda 1</th>
-                    <th>Gädda 2</th>
-                    <th>Gädda 3</th>
-                    <th>Gädda 4</th>
-                    <th>Gädda 5</th>
-                    <th>Gädda 6</th>
-                    <th>Gädda 7</th>
-                    <th>Gädda 8</th>
-                    <th>Gädda 9</th>
-                    <th>Gädda 10</th>
-                    <th>Totalt CM</th>
+                    <th>@Model.Species 1</th>
+                    <th>@Model.Species 2</th>
+                    <th>@Model.Species 3</th>
+                    <th>@Model.Species 4</th>
+                    <th>@Model.Species 5</th>
+                    <th>@Model.Species 6</th>
+                    <th>@Model.Species 7</th>
+                    <th>@Model.Species 8</th>
+                    <th>@Model.Species 9</th>
+                    <th>@Model.Species 10</th>
                 </tr>
             </thead>
             <tbody>
@@ -51,16 +55,26 @@
                     //collection.Skip(Math.Max(0, collection.Count() - N));
                     <tr>
                         <th>
-                            <a data-toggle="modal" data-id="@user.Id" title="Lägg till fisk" class="open-GetUserId btn btn-primary" href="#AddFish">@user.Name</a>
+                            @if (User.Identity.IsAuthenticated)
+                            {
+                                <a data-toggle="modal" data-id="@user.Id" title="Lägg till fisk" class="open-GetUserId btn btn-primary" href="#AddFish">@user.Name</a>
+                            }
+                            else
+                            {
+                                <p>@user.Name Total: @Model.Fishes.Where(x => x.ParticipantId == user.Id).OrderBy(l => l.Length).Skip(Math.Max(0, Model.Fishes.Where(x => x.ParticipantId == user.Id).Count() - 10)).Sum(x => x.Length)CM </p>
+                            }
                         </th>
                         @foreach (var item in Model.Fishes.Where(x => x.ParticipantId == user.Id).OrderBy(l => l.Length).Skip(Math.Max(0, Model.Fishes.Where(x => x.ParticipantId == user.Id).Count() - 10)))
                         {
-                            <td>@item.Length</td>
+                            <td>@item.Length CM</td>
                         }
                     </tr>
-                    <tr>        
-                        <td>Total: @Model.Fishes.Where(x => x.ParticipantId == user.Id).OrderBy(l => l.Length).Skip(Math.Max(0, Model.Fishes.Where(x => x.ParticipantId == user.Id).Count() - 10)).Sum(x => x.Length)CM </td >
-                    </tr>
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <tr>
+                            <td>Total: @Model.Fishes.Where(x => x.ParticipantId == user.Id).OrderBy(l => l.Length).Skip(Math.Max(0, Model.Fishes.Where(x => x.ParticipantId == user.Id).Count() - 10)).Sum(x => x.Length)CM </td>
+                        </tr>
+                    }
                 }
             </tbody>
         </table>
@@ -148,12 +162,9 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
             </div>
-
         </div>
     </div>
 </div>
-
-
 
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>

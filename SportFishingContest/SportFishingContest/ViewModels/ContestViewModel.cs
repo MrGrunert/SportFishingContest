@@ -15,6 +15,8 @@ namespace SportFishingContest.ViewModels
         public Guid ParticipantId { get; set; }
         public Fish Fish { get; set; }
 
+        public string Species { get; set; }
+
         [Required]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:yyyy-MM-dd}")]
         [Display(Name = "Tävlingsdatum")]

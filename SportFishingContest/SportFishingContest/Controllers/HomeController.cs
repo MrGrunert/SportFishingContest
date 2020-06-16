@@ -73,10 +73,10 @@ namespace SportFishingContest.Controllers
                 Id = theContest.Id,
                 ContestName = theContest.Name,
                 Date = theContest.Date,
+                Species = theContest.Species,
                 Participants = participants,
                 Fishes = fishes.ToList()
             };
-
 
             return View(viewModel);
         }
